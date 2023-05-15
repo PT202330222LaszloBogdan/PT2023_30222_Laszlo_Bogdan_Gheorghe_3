@@ -12,9 +12,8 @@ import java.util.logging.Logger;
 
 
 /**
- * @Author: Technical University of Cluj-Napoca, Romania Distributed Systems
- *          Research Laboratory, http://dsrl.coned.utcluj.ro/
- * @Since: Apr 03, 2017
+ * @Author: Laszlo Bogdan Gheorghe
+ * @Since: May 15 , 2023
  * @Source http://www.java-blog.com/mapping-javaobjects-database-reflection-generics
  */
 public class AbstractDAO<T> {
@@ -25,6 +24,12 @@ public class AbstractDAO<T> {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
     }
+
+    /**
+     * Method that returns a mysql query for selecting an object from a table where id =field
+     * @param field
+     * @return String
+     */
     private String createSelectQuery(String field) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
@@ -34,6 +39,11 @@ public class AbstractDAO<T> {
         sb.append(" WHERE " + field + " =?");
         return sb.toString();
     }
+
+    /**
+     * Method that return a my sql query for returning all of the objects in a table
+     * @return String
+     */
     private String createSelectAllQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
@@ -42,6 +52,11 @@ public class AbstractDAO<T> {
         sb.append(type.getSimpleName());
         return sb.toString();
     }
+
+    /**
+     * Method that fills a JTable model
+     * @param model
+     */
     public void FillTable(DefaultTableModel model)
     {
         Connection connection=null;
@@ -72,6 +87,11 @@ public class AbstractDAO<T> {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Method that returns a list from a table with all the objects
+     * @return List
+     */
     public List<T> findAll() {
         // TODO:
         Connection connection=null;
@@ -92,6 +112,11 @@ public class AbstractDAO<T> {
         }
         return null;
     }
+
+    /**
+     * Method that returns a query for inserting an object in a table
+     * @return String
+     */
     private String createInsertQuery() {
         StringBuilder sb = new StringBuilder();
         Field[] fields=type.getDeclaredFields();
@@ -116,6 +141,12 @@ public class AbstractDAO<T> {
         }
         return sb.toString();
     }
+
+    /**
+     * Method that inserts an object in a table
+     * @param t
+     * @return boolean
+     */
     public boolean insert(T t){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -148,6 +179,12 @@ public class AbstractDAO<T> {
         }
         return false;
     }
+
+    /**
+     * Method that returns an object from a table by its id
+     * @param id
+     * @return T
+     */
     public T findById(int id) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -207,6 +244,12 @@ public class AbstractDAO<T> {
         }
         return list;
     }
+
+    /**
+     * Method that creates a query for updateing an object from a table
+     * @param id
+     * @return String
+     */
     private String createUpdateQuery(int id) {
         StringBuilder sb = new StringBuilder();
         Field[] fields=type.getDeclaredFields();
@@ -229,6 +272,13 @@ public class AbstractDAO<T> {
         sb.append("id=").append(String.valueOf(id));
         return sb.toString();
     }
+
+    /**
+     * Method that updates an object from a table
+     * @param id
+     * @param t
+     * @return boolean
+     */
     public boolean update(int id,T t) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -264,6 +314,12 @@ public class AbstractDAO<T> {
         }
         return false;
     }
+
+    /**
+     * Method that creates a query for deleteing an object from a table
+     * @param id
+     * @return String
+     */
     private String createDeleteQuery(int id) {
         StringBuilder sb = new StringBuilder();
         Field[] fields=type.getDeclaredFields();
@@ -273,6 +329,12 @@ public class AbstractDAO<T> {
         sb.append("id=").append(id);
         return sb.toString();
     }
+
+    /**
+     * Method that deletes an object from a table
+     * @param id
+     * @return boolean
+     */
     public boolean delete(int id) {
         // TODO:
         Connection connection = null;
