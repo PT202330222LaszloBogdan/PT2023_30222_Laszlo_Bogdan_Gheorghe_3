@@ -1,5 +1,5 @@
 package Model;
-
+//public recordBill(int id, int total);
 public class Bill {
     private int id;
     private int total;
